@@ -6,6 +6,7 @@ import { Example3 } from "./examples/example3";
 import { Example4 } from "./examples/example4";
 import { Example5 } from "./examples/example5";
 import { Example6 } from "./examples/example6";
+import { Example7 } from "./examples/example7";
 
 function App() {
   const [currentExample, setCurrentExample] = React.useState<number | null>(
@@ -22,6 +23,7 @@ function App() {
           <button onClick={() => setCurrentExample(4)}>4</button>
           <button onClick={() => setCurrentExample(5)}>5</button>
           <button onClick={() => setCurrentExample(6)}>6</button>
+          <button onClick={() => setCurrentExample(7)}>7</button>
         </div>
         <div>
           {currentExample === 1 && <Example1 />}
@@ -30,6 +32,7 @@ function App() {
           {currentExample === 4 && <Example4 />}
           {currentExample === 5 && <Example5 />}
           {currentExample === 6 && <Example6 />}
+          {currentExample === 7 && <Example7 />}
         </div>
       </div>
     </div>

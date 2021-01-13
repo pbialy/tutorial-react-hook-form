@@ -32,6 +32,7 @@ export const Example6 = () => {
           Talk about:
           - The default validation is on "change", but it only triggers after first submit
           - default on is `mode: "onSubmit", reValidateMode: "onChange"`
+          - mode - when 1st validation occurs, reValidateMode - when next validations occurs
           - show the onChange/onChange, onSubmit/onSubmit and onBlur/onBlur versions
           */
   return (

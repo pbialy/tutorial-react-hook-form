@@ -40,6 +40,8 @@ export const Example5 = () => {
           - you can set `criteriaMode` to "all"
           - then `console.log(errors)` will have all errors in `types` (show it)
           - you need to write your own error getter then (show "getPrioritizedError")
+          - Keep in mind that it's not actually "5) Validation order" (all validators runs, no matter the result),
+            it's more "5) Validation's errors order)
         */
   return (
     <div>
