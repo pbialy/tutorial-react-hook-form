@@ -1,24 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Example1} from "./examples/example1";
+import {Example2} from "./examples/example2";
 
 function App() {
+
+  const [currentExample, setCurrentExample] = React.useState<number | null>(null)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div style={{height: '70px', borderBottom: 'solid 3px blue'}}>
+          <button onClick={() => setCurrentExample(1)}>1</button>
+          <button onClick={() => setCurrentExample(2)}>2</button>
+          <button onClick={() => setCurrentExample(3)}>3</button>
+        </div>
+        <div>
+          {currentExample === 1 && <Example1/>}
+          {currentExample === 2 && <Example2/>}
+        </div>
+      </div>
     </div>
   );
 }
