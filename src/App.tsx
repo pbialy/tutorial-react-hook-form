@@ -4,6 +4,8 @@ import { Example1 } from "./examples/example1";
 import { Example2 } from "./examples/example2";
 import { Example3 } from "./examples/example3";
 import { Example4 } from "./examples/example4";
+import { Example5 } from "./examples/example5";
+import { Example6 } from "./examples/example6";
 
 function App() {
   const [currentExample, setCurrentExample] = React.useState<number | null>(
@@ -26,6 +28,8 @@ function App() {
           {currentExample === 2 && <Example2 />}
           {currentExample === 3 && <Example3 />}
           {currentExample === 4 && <Example4 />}
+          {currentExample === 5 && <Example5 />}
+          {currentExample === 6 && <Example6 />}
         </div>
       </div>
     </div>
