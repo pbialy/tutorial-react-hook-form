@@ -1,11 +1,33 @@
 import { useForm } from "react-hook-form";
 
+// const ERRORS_ORDER = ["pattern", "minLength"];
+
 export const Example5 = () => {
   const { register, handleSubmit, errors } = useForm();
+
+  // The default one:
+  // const { register, handleSubmit, errors } = useForm({
+  //   criteriaMode: "firstError",
+  // });
+
+  // const { register, handleSubmit, errors } = useForm({
+  //   criteriaMode: "all",
+  // });
 
   const triggerSubmit = (myData: any) => {
     console.log(myData);
   };
+
+  // const getPrioritizedError = (): string => {
+  //   if (!errors || !errors.min4digits) {
+  //     return "";
+  //   }
+  //
+  //   const firstErrorCode = ERRORS_ORDER.find((errorCode) => {
+  //     return Object.keys(errors.min4digits.types).includes(errorCode);
+  //   });
+  //   return firstErrorCode ? errors.min4digits.types[firstErrorCode] : "";
+  // };
 
   /*
         Talk about:
@@ -15,7 +37,9 @@ export const Example5 = () => {
             Instead I should see "Only digits" right after I press "s"
           - changing the order doesn't work (show it)
           - `errors` object stores only 1 error (show `console.log(errors)`)
-          - ??? no idea :( ???
+          - you can set `criteriaMode` to "all"
+          - then `console.log(errors)` will have all errors in `types` (show it)
+          - you need to write your own error getter then (show "getPrioritizedError")
         */
   return (
     <div>
@@ -44,6 +68,8 @@ export const Example5 = () => {
       {errors.min4digits && <p>{errors.min4digits.message}</p>}
 
       <br />
+
+      {/*{getPrioritizedError()}*/}
 
       {console.log(errors)}
     </div>
