@@ -27,6 +27,16 @@ function App() {
           <button onClick={() => setCurrentExample(5)}>{example5title}</button>
           <button onClick={() => setCurrentExample(6)}>{example6title}</button>
           <button onClick={() => setCurrentExample(7)}>{example7title}</button>
+          <div
+            style={{
+              height: "26px",
+              width: "100%",
+              background: "purple",
+              color: "yellow",
+            }}
+          >
+            Last presentation line
+          </div>
           <button onClick={() => setCurrentExample(8)}>{example8title}</button>
           <button onClick={() => setCurrentExample(9)}>{example9title}</button>
           <button onClick={() => setCurrentExample(10)}>
