@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 
 // const ERRORS_ORDER = ["pattern", "minLength"];
 
+export const example5title = "5) Validation order";
+
 export const Example5 = () => {
   const { register, handleSubmit, errors } = useForm();
 
@@ -45,7 +47,7 @@ export const Example5 = () => {
         */
   return (
     <div>
-      <h1>5) Validation order</h1>
+      <h1>{example5title}</h1>
 
       <br />
       <br />

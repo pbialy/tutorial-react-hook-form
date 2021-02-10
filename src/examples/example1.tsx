@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 
+export const example1title = "1) Howto setup basic form";
+
 export const Example1 = () => {
   const { register, handleSubmit } = useForm();
 
@@ -22,7 +24,7 @@ export const Example1 = () => {
 
   return (
     <div>
-      <h1>1) Howto setup basic form</h1>
+      <h1>{example1title}</h1>
       <div>
         To install - run{" "}
         <span style={{ backgroundColor: "#CCC", color: "#488" }}>

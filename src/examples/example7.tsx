@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 
+export const example7title = "7) Custom validator";
+
 export const Example7 = () => {
   const { register, handleSubmit, errors } = useForm({
     mode: "onChange",
@@ -18,7 +20,7 @@ export const Example7 = () => {
     */
   return (
     <div>
-      <h1>7) Custom validator</h1>
+      <h1>{example7title}</h1>
 
       <br />
       <br />

@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 
+export const example4title = "4) Multiple validators";
+
 export const Example4 = () => {
   const { register, handleSubmit, errors } = useForm();
 
@@ -14,7 +16,7 @@ export const Example4 = () => {
       */
   return (
     <div>
-      <h1>4) Multiple validators</h1>
+      <h1>{example4title}</h1>
 
       <br />
       <br />
