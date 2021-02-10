@@ -8,6 +8,7 @@ import { Example5, example5title } from "./examples/example5";
 import { Example6, example6title } from "./examples/example6";
 import { Example7, example7title } from "./examples/example7";
 import { Example8, example8title } from "./examples/example8";
+import { Example9, example9title } from "./examples/example9";
 
 function App() {
   const [currentExample, setCurrentExample] = React.useState<number | null>(
@@ -26,6 +27,7 @@ function App() {
           <button onClick={() => setCurrentExample(6)}>{example6title}</button>
           <button onClick={() => setCurrentExample(7)}>{example7title}</button>
           <button onClick={() => setCurrentExample(8)}>{example8title}</button>
+          <button onClick={() => setCurrentExample(9)}>{example9title}</button>
         </div>
         <div className="examplesContainer">
           {currentExample === 1 && <Example1 />}
@@ -36,6 +38,7 @@ function App() {
           {currentExample === 6 && <Example6 />}
           {currentExample === 7 && <Example7 />}
           {currentExample === 8 && <Example8 />}
+          {currentExample === 9 && <Example9 />}
         </div>
       </div>
     </div>
