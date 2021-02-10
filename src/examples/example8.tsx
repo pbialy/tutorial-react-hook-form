@@ -1,8 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-import debounce from "debounce";
-
 export const example8title = "8) Async validator";
 
 export const Example8 = () => {
@@ -11,14 +9,10 @@ export const Example8 = () => {
         - We want to check if the name of the shop is taken WHILE inputting
         - Looks like async validator only runs if normal validators are fine
         - when field empty - async runs (add === '' check)
-        - problem - there's no debounce/throttle
+        - problem - there's no debounce/throttle build in reactHookForms, and I haven't found a way around
       */
 
-  // const { register, handleSubmit, errors } = useForm({
-  //   mode: "onChange",
-  //   reValidateMode: "onChange",
-  // });
-  const { register, handleSubmit, errors, trigger } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -64,9 +58,6 @@ export const Example8 = () => {
                 },
               },
             })}
-            onChange={debounce(async () => {
-              await trigger("shopName");
-            }, 200)}
           />
           {showLoader && (
             <div style={{ color: "#441" }}>Checking if name is taken...</div>
@@ -94,7 +85,6 @@ function sleep(ms: number) {
 }
 
 async function checkIfNameTaken(name: string) {
-  console.log("checkIfNameTaken called");
   await sleep(2000);
   if (name === "Nykredit" || name === "Empik") {
     return true;
