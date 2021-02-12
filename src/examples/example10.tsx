@@ -1,23 +1,18 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export const example10title = "10) Set values";
-
-const data = [
-  { name: "John", age: "34" },
-  { name: "Bob", age: "19" },
-  { name: "Mike", age: "7" },
-];
+export const example10title = "10) Dependent validation";
 
 export const Example10 = () => {
   /*
-      Talk about:
-        - We might want to base our inputs on some other data - we have something like that in ApiGui already
-        - To do that we use "setValue" two times (can't use it once)
-        - You can pass "{ shouldValidate: true }" in order to trigger validation after setting value
-      */
+        Talk about:
+          - We want the value of 3 fields to not be bigger than 100
+          - we use "getValues" to get values from form
+          - we use "trigger" to validate other fields
+          - on a side note - "errors" should no longer be used (deprecated soon), use "formState.errors" instead
+        */
 
-  const { register, handleSubmit, formState, setValue } = useForm({
+  const { register, handleSubmit, getValues, trigger, formState } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -26,10 +21,15 @@ export const Example10 = () => {
     console.log(myData);
   };
 
-  const handleDataImport = (personIndex: number) => {
-    setValue("name", data[personIndex].name);
-    setValue("age", data[personIndex].age);
-    // setValue("age", data[personIndex].age, { shouldValidate: true });
+  const sumCheckerValidator = () => {
+    const sum =
+      Number(getValues()["val1"]) +
+      Number(getValues()["val2"]) +
+      Number(getValues()["val3"]);
+    if (sum > 100) {
+      return "Error - sum is greater than 100";
+    }
+    return true;
   };
 
   return (
@@ -39,72 +39,80 @@ export const Example10 = () => {
       <br />
       <br />
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>click</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{data[0].name}</td>
-            <td>{data[0].age}</td>
-            <td>
-              <button onClick={() => handleDataImport(0)}>import</button>
-            </td>
-          </tr>
-          <tr>
-            <td>{data[1].name}</td>
-            <td>{data[1].age}</td>
-            <td>
-              <button onClick={() => handleDataImport(1)}>import</button>
-            </td>
-          </tr>
-          <tr>
-            <td>{data[2].name}</td>
-            <td>{data[2].age}</td>
-            <td>
-              <button onClick={() => handleDataImport(2)}>import</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <br />
-      <br />
-      <br />
-
       <form onSubmit={handleSubmit(triggerSubmit)}>
+        <div>Sum of those three can't be greater than 100</div>
         <div>
-          Name
-          <input name="name" ref={register} />
-        </div>
-
-        <div>
-          Age
+          Value 1
           <input
-            name="age"
+            name="val1"
             ref={register({
-              min: {
-                value: 18,
-                message: "You must be mature bro",
+              validate: {
+                isSumBiggerThan100: () => sumCheckerValidator(),
               },
             })}
+            onChange={() => {
+              trigger(["val2", "val3"]);
+            }}
           />
+          {formState.errors.val1 && (
+            <span style={{ color: "red" }}>
+              {formState.errors.val1.message}
+            </span>
+          )}
         </div>
 
+        <div>
+          Value 2
+          <input
+            name="val2"
+            ref={register({
+              validate: {
+                isSumBiggerThan100: () => sumCheckerValidator(),
+              },
+            })}
+            onChange={() => {
+              trigger(["val1", "val3"]);
+            }}
+          />
+          {formState.errors.val2 && (
+            <span style={{ color: "red" }}>
+              {formState.errors.val2.message}
+            </span>
+          )}
+        </div>
+
+        <div>
+          Value 3
+          <input
+            name="val3"
+            ref={register({
+              validate: {
+                isSumBiggerThan100: () => sumCheckerValidator(),
+              },
+            })}
+            onChange={() => {
+              trigger(["val1", "val2"]);
+            }}
+          />
+          {formState.errors.val3 && (
+            <span style={{ color: "red" }}>
+              {formState.errors.val3.message}
+            </span>
+          )}
+        </div>
+        <br />
         <button type="submit">Submit</button>
       </form>
 
       <br />
       <br />
 
-      {formState.errors.age && (
-        <p style={{ color: "red" }}>{formState.errors.age.message}</p>
+      {formState.errors.val1 && (
+        <p style={{ color: "red" }}>{formState.errors.val1.message}</p>
       )}
       <br />
+
+      {console.log("formState.errors", formState.errors)}
     </div>
   );
 };

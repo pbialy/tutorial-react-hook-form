@@ -1,18 +1,20 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export const example9title = "9) Dependent validation";
+export const example9title = "9) Async validator with custom debounce";
+
+const wasSomethingTypedArray: number[] = [];
 
 export const Example9 = () => {
   /*
-      Talk about:
-        - We want the value of 3 fields to not be bigger than 100
-        - we use "getValues" to get values from form
-        - we use "trigger" to validate other fields
-        - on a side note - "errors" should no longer be used (deprecated soon), use "formState.errors" instead
-      */
+        Talk about:
+          - We want to check if the name of the shop is taken WHILE inputting
+          - Looks like async validator only runs if normal validators are fine
+          - when field empty - async runs (add === '' check)
+          - problem - there's no debounce/throttle build in reactHookForms, and I haven't found a way around
+        */
 
-  const { register, handleSubmit, getValues, trigger, formState } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -21,15 +23,37 @@ export const Example9 = () => {
     console.log(myData);
   };
 
-  const sumCheckerValidator = () => {
-    const sum =
-      Number(getValues()["val1"]) +
-      Number(getValues()["val2"]) +
-      Number(getValues()["val3"]);
-    if (sum > 100) {
-      return "Error - sum is greater than 100";
+  const [showLoader, setShowLoader] = React.useState(false);
+
+  const nameChecker = async (value: string) => {
+    wasSomethingTypedArray.push(Math.random()); // show that a char was typed, and thus validation and this function were fired
+
+    console.log("before sleep - ", wasSomethingTypedArray.length);
+    await sleep(500); // this is the debounce timer - 0.5 second
+
+    wasSomethingTypedArray.pop(); // after this 0.5 we remove key stroke from array
+    console.log("after pop - ", wasSomethingTypedArray.length);
+    if (wasSomethingTypedArray.length === 0) {
+      // and check if there are no additional keystrokes
+      setShowLoader(true); // if no - we show the loader
+
+      const isTaken = await checkIfNameTaken(value); // and trigger backend request
+      setShowLoader(false); // we can remove the loader
+
+      console.log("after response ", wasSomethingTypedArray.length);
+      if (wasSomethingTypedArray.length === 0) {
+        // when response come and there were no more keystrokes in the meantime
+
+        if (isTaken) {
+          // and show the error message if needed
+          return `Sorry, name ${value} is already taken.`;
+        } else {
+          return true;
+        }
+      }
+      return true; // this is to prevent showing errors during loading
     }
-    return true;
+    return true; // this is to prevent showing errors during typing
   };
 
   return (
@@ -40,64 +64,24 @@ export const Example9 = () => {
       <br />
 
       <form onSubmit={handleSubmit(triggerSubmit)}>
-        <div>Sum of those three can't be greater than 100</div>
         <div>
-          Value 1
+          Enter your shop name
           <input
-            name="val1"
+            name="shopName"
             ref={register({
+              minLength: {
+                value: 3,
+                message: "Shop's name must have at least 3 letters",
+              },
               validate: {
-                isSumBiggerThan100: () => sumCheckerValidator(),
+                isNameTaken: async (value) => {
+                  return await nameChecker(value);
+                },
               },
             })}
-            onChange={() => {
-              trigger(["val2", "val3"]);
-            }}
           />
-          {formState.errors.val1 && (
-            <span style={{ color: "red" }}>
-              {formState.errors.val1.message}
-            </span>
-          )}
-        </div>
-
-        <div>
-          Value 2
-          <input
-            name="val2"
-            ref={register({
-              validate: {
-                isSumBiggerThan100: () => sumCheckerValidator(),
-              },
-            })}
-            onChange={() => {
-              trigger(["val1", "val3"]);
-            }}
-          />
-          {formState.errors.val2 && (
-            <span style={{ color: "red" }}>
-              {formState.errors.val2.message}
-            </span>
-          )}
-        </div>
-
-        <div>
-          Value 3
-          <input
-            name="val3"
-            ref={register({
-              validate: {
-                isSumBiggerThan100: () => sumCheckerValidator(),
-              },
-            })}
-            onChange={() => {
-              trigger(["val1", "val2"]);
-            }}
-          />
-          {formState.errors.val3 && (
-            <span style={{ color: "red" }}>
-              {formState.errors.val3.message}
-            </span>
+          {showLoader && (
+            <div style={{ color: "#441" }}>Checking if name is taken...</div>
           )}
         </div>
         <br />
@@ -107,12 +91,25 @@ export const Example9 = () => {
       <br />
       <br />
 
-      {formState.errors.val1 && (
-        <p style={{ color: "red" }}>{formState.errors.val1.message}</p>
+      {errors.shopName && (
+        <p style={{ color: "red" }}>{errors.shopName.message}</p>
       )}
       <br />
 
-      {console.log("formState.errors", formState.errors)}
+      {/*{console.log(errors)}*/}
     </div>
   );
 };
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function checkIfNameTaken(name: string) {
+  await sleep(2000);
+  if (name === "Nykredit" || name === "Empik") {
+    return true;
+  } else {
+    return false;
+  }
+}
