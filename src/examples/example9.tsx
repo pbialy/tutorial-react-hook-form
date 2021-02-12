@@ -8,10 +8,16 @@ const wasSomethingTypedArray: true[] = [];
 export const Example9 = () => {
   /*
         Talk about:
-          - We want to check if the name of the shop is taken WHILE inputting
-          - Looks like async validator only runs if normal validators are fine
-          - when field empty - async runs (add === '' check)
-          - problem - there's no debounce/throttle build in reactHookForms, and I haven't found a way around
+          - I've created a custom debounce method - basicaly everytime key is stroked push something to an array
+            , then if array is empty after 0.5second - trigger backend request
+          - show that it:
+            - start loading after 0.5sec of no typing
+            - show error if needed
+            - if request is triggered but additional things are typed - no error is shown (type 'Nykredit' and start typing after loading)
+          - important thing - if `wasSomethingTypedArray` is defined inside component it won't work (because
+            it resets every render)
+          - this "nameChecker" could be put outside of component too (just pass `setShowLoader` to it),
+            I've left it here only to show the thing from point above
         */
 
   const { register, handleSubmit, errors } = useForm({
@@ -26,6 +32,11 @@ export const Example9 = () => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const nameChecker = async (value: string) => {
+    // don't trigger request on empty value
+    if (value === "") {
+      return true;
+    }
+
     wasSomethingTypedArray.push(true); // show that a char was typed, and thus validation and this function were fired
 
     // console.log("before sleep - ", wasSomethingTypedArray.length);
@@ -77,6 +88,7 @@ export const Example9 = () => {
               validate: {
                 isNameTaken: async (value) => {
                   return await nameChecker(value);
+                  // return await nameChecker(value, setShowLoader);
                 },
               },
             })}
@@ -114,3 +126,40 @@ async function checkIfNameTaken(name: string) {
     return false;
   }
 }
+
+// const nameChecker = async (value: string, setShowLoader: any) => {
+//   // don't trigger request on empty value
+//   if (value === "") {
+//     return true;
+//   }
+//
+//   wasSomethingTypedArray.push(true); // show that a char was typed, and thus validation and this function were fired
+//
+//   // console.log("before sleep - ", wasSomethingTypedArray.length);
+//   await sleep(500); // this is the debounce timer - 0.5 second
+//
+//   wasSomethingTypedArray.pop(); // after this 0.5 we remove key stroke from array
+//   // console.log("after pop - ", wasSomethingTypedArray.length);
+//
+//   // and check if there were no additional keystrokes
+//   if (wasSomethingTypedArray.length === 0) {
+//     setShowLoader(true); // if no - we show the loader
+//
+//     const isTaken = await checkIfNameTaken(value); // and trigger backend request
+//     setShowLoader(false); // we can remove the loader
+//
+//     // console.log("after response ", wasSomethingTypedArray.length);
+//     if (wasSomethingTypedArray.length === 0) {
+//       // when response come and there were no more keystrokes in the meantime
+//
+//       // and show the error message if needed
+//       if (isTaken) {
+//         return `Sorry, name ${value} is already taken.`;
+//       } else {
+//         return true;
+//       }
+//     }
+//     return true; // this is to prevent showing errors during loading
+//   }
+//   return true; // this is to prevent showing errors during typing
+// };
