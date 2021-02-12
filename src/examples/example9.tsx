@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 
 export const example9title = "9) Async validator with custom debounce";
 
-const wasSomethingTypedArray: number[] = [];
+const wasSomethingTypedArray: true[] = [];
 
 export const Example9 = () => {
   /*
@@ -26,26 +26,27 @@ export const Example9 = () => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const nameChecker = async (value: string) => {
-    wasSomethingTypedArray.push(Math.random()); // show that a char was typed, and thus validation and this function were fired
+    wasSomethingTypedArray.push(true); // show that a char was typed, and thus validation and this function were fired
 
-    console.log("before sleep - ", wasSomethingTypedArray.length);
+    // console.log("before sleep - ", wasSomethingTypedArray.length);
     await sleep(500); // this is the debounce timer - 0.5 second
 
     wasSomethingTypedArray.pop(); // after this 0.5 we remove key stroke from array
-    console.log("after pop - ", wasSomethingTypedArray.length);
+    // console.log("after pop - ", wasSomethingTypedArray.length);
+
+    // and check if there were no additional keystrokes
     if (wasSomethingTypedArray.length === 0) {
-      // and check if there are no additional keystrokes
       setShowLoader(true); // if no - we show the loader
 
       const isTaken = await checkIfNameTaken(value); // and trigger backend request
       setShowLoader(false); // we can remove the loader
 
-      console.log("after response ", wasSomethingTypedArray.length);
+      // console.log("after response ", wasSomethingTypedArray.length);
       if (wasSomethingTypedArray.length === 0) {
         // when response come and there were no more keystrokes in the meantime
 
+        // and show the error message if needed
         if (isTaken) {
-          // and show the error message if needed
           return `Sorry, name ${value} is already taken.`;
         } else {
           return true;
