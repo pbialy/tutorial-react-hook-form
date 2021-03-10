@@ -15,9 +15,18 @@ export const Example11 = () => {
           - We might want to base our inputs on some other data - we have something like that in ApiGui already
           - To do that we use "setValue" for every filed (can't use it once)
           - You can pass "{ shouldValidate: true }" in order to trigger validation after setting value
+          - BONUS - u can set multiple fields with `reset`, but to trigger validation you need to
+            put `trigger` in `setTimeout`, which is ... very bad practice
         */
 
-  const { register, handleSubmit, formState, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState,
+    setValue,
+    reset,
+    trigger,
+  } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -27,14 +36,20 @@ export const Example11 = () => {
   };
 
   const handleDataImport = (personIndex: number) => {
-    setValue("name", data[personIndex].name);
-    setValue("age", data[personIndex].age);
+    // setValue("name", data[personIndex].name);
+    // setValue("age", data[personIndex].age);
     // setValue("age", data[personIndex].age, { shouldValidate: true });
+
+    reset(data[personIndex]);
+    // trigger();
+    setTimeout(() => trigger(), 0);
   };
 
   return (
     <div>
       <h1>{example11title}</h1>
+
+      {/*<button onClick={() => trigger()}>trigger</button>*/}
 
       <br />
       <br />
