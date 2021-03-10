@@ -8,8 +8,8 @@ const wasSomethingTypedArray: true[] = [];
 export const Example9 = () => {
   /*
         Talk about:
-          - I've created a custom debounce method - basicaly everytime key is stroked push something to an array
-            , then if array is empty after 0.5second - trigger backend request
+          - I've created a custom debounce method - basically everytime key is stroked we push something to an array,
+            then if array is empty after 0.5second - trigger backend request
           - show that it:
             - start loading after 0.5sec of no typing
             - show error if needed
@@ -128,38 +128,28 @@ async function checkIfNameTaken(name: string) {
 }
 
 // const nameChecker = async (value: string, setShowLoader: any) => {
-//   // don't trigger request on empty value
 //   if (value === "") {
 //     return true;
 //   }
 //
-//   wasSomethingTypedArray.push(true); // show that a char was typed, and thus validation and this function were fired
+//   wasSomethingTypedArray.push(true);
+//   await sleep(500);
+//   wasSomethingTypedArray.pop();
 //
-//   // console.log("before sleep - ", wasSomethingTypedArray.length);
-//   await sleep(500); // this is the debounce timer - 0.5 second
-//
-//   wasSomethingTypedArray.pop(); // after this 0.5 we remove key stroke from array
-//   // console.log("after pop - ", wasSomethingTypedArray.length);
-//
-//   // and check if there were no additional keystrokes
 //   if (wasSomethingTypedArray.length === 0) {
-//     setShowLoader(true); // if no - we show the loader
+//     setShowLoader(true);
 //
-//     const isTaken = await checkIfNameTaken(value); // and trigger backend request
-//     setShowLoader(false); // we can remove the loader
+//     const isTaken = await checkIfNameTaken(value);
+//     setShowLoader(false);
 //
-//     // console.log("after response ", wasSomethingTypedArray.length);
 //     if (wasSomethingTypedArray.length === 0) {
-//       // when response come and there were no more keystrokes in the meantime
-//
-//       // and show the error message if needed
 //       if (isTaken) {
 //         return `Sorry, name ${value} is already taken.`;
 //       } else {
 //         return true;
 //       }
 //     }
-//     return true; // this is to prevent showing errors during loading
+//     return true;
 //   }
-//   return true; // this is to prevent showing errors during typing
+//   return true;
 // };

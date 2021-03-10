@@ -13,7 +13,7 @@ export const Example11 = () => {
   /*
         Talk about:
           - We might want to base our inputs on some other data - we have something like that in ApiGui already
-          - To do that we use "setValue" two times (can't use it once)
+          - To do that we use "setValue" for every filed (can't use it once)
           - You can pass "{ shouldValidate: true }" in order to trigger validation after setting value
         */
 

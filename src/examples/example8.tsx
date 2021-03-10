@@ -9,7 +9,7 @@ export const Example8 = () => {
         - We want to check if the name of the shop is taken WHILE inputting
         - Looks like async validator only runs if normal validators are fine
         - when field empty - async runs (add === '' check)
-        - problem - there's no debounce/throttle build in reactHookForms, and I haven't found a way around
+        - problem - there's no debounce/throttle build in reactHookForms
       */
 
   const { register, handleSubmit, errors } = useForm({
@@ -79,6 +79,8 @@ export const Example8 = () => {
     </div>
   );
 };
+
+// backend stuffz
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

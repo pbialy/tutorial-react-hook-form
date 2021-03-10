@@ -1,17 +1,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export const example10title = "10) Dependent validation";
+export const example12title = "12) Adding/removing fields";
 
-export const Example10 = () => {
+export const Example12 = () => {
   /*
-        Talk about:
-          - We want the value of 3 fields to not be bigger than 100
-          - we use "trigger" to validate other fields
-          - we use "getValues" to get values from form
-          - on a side note - "errors" (which I've used in previous examples)
-            should no longer be used (deprecated soon), use "formState.errors" instead
-        */
+          Talk about:
+            - We want the value of 3 fields to not be bigger than 100
+            - we use "getValues" to get values from form
+            - we use "trigger" to validate other fields
+            - on a side note - "errors" should no longer be used (deprecated soon), use "formState.errors" instead
+          */
 
   const { register, handleSubmit, getValues, trigger, formState } = useForm({
     mode: "onChange",
@@ -35,7 +34,7 @@ export const Example10 = () => {
 
   return (
     <div>
-      <h1>{example10title}</h1>
+      <h1>{example12title}</h1>
 
       <br />
       <br />
