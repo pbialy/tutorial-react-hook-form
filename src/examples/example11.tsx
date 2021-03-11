@@ -17,6 +17,7 @@ export const Example11 = () => {
           - You can pass "{ shouldValidate: true }" in order to trigger validation after setting value
           - BONUS - u can set multiple fields with `reset`, but to trigger validation you need to
             put `trigger` in `setTimeout`, which is ... very bad practice
+          - for many fields the solution with "Object.keys..." is probably the best one
         */
 
   const {
@@ -24,6 +25,7 @@ export const Example11 = () => {
     handleSubmit,
     formState,
     setValue,
+    getValues,
     reset,
     trigger,
   } = useForm({
@@ -40,10 +42,18 @@ export const Example11 = () => {
     // setValue("age", data[personIndex].age);
     // setValue("age", data[personIndex].age, { shouldValidate: true });
 
-    reset(data[personIndex]);
+    // reset(data[personIndex]);
     // trigger();
-    setTimeout(() => trigger(), 0);
+    // setTimeout(() => trigger(), 0);
+
+    Object.keys(getValues()).forEach((keyName: string) => {
+      setValue(keyName, (data[personIndex] as any)[keyName], {
+        shouldValidate: true,
+      });
+    });
   };
+
+  console.log(getValues());
 
   return (
     <div>
